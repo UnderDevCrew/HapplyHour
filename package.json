@@ -1,0 +1,15 @@
+{
+  "name": "HapplyHour",
+  "version": "0.0.1",
+  "description": "A mobile app to find beers around you, build on top of Phonegap and Polymer.",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/UnderDevCrew/HapplyHour.git"
+  },
+  "author": "PhoneGap Team",
+  "license": "private",
+  "bugs": {
+    "url": "https://github.com/UnderDevCrew/HapplyHour/issues"
+  },
+  "homepage": "https://github.com/UnderDevCrew/HapplyHour"
+}
