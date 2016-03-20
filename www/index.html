@@ -75,8 +75,23 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </head>
 
-
 <body unresolved>
+
+<script type="text/javascript" charset="utf-8">
+    document.addEventListener("deviceready", onDeviceReady, false);
+
+
+    function onDeviceReady() {
+        $('#button_bar').on('click', function(){
+            navigator.geolocation.getCurrentPosition(geolocationSuccess);
+        });
+
+    }
+
+    function geolocationSuccess(position) {
+        $('#info').html("Latitude : " + position.coords.latitude);
+    }
+</script>
 
 <paper-toolbar class="custom">
     <paper-icon-button icon="menu" on-tap="menuAction"></paper-icon-button>
