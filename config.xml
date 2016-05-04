@@ -9,7 +9,7 @@
     </author>
     <content src="index.html" />
     <!-- before sharing the app, ensure that all these preferences and plugins are useful -->
-    <preference name="permissions" value="none" />
+    <preference name="permissions" value="" />
     <preference name="orientation" value="default" />
     <preference name="target-device" value="universal" />
     <preference name="fullscreen" value="true" />
@@ -42,6 +42,7 @@
     <gap:plugin name="org.apache.cordova.network-information" />
     <gap:plugin name="org.apache.cordova.splashscreen" />
     <gap:plugin name="org.apache.cordova.vibration" />
+
     <icon src="icon.png" />
     <icon gap:platform="android" gap:qualifier="ldpi" src="www/res/icon/android/icon-36-ldpi.png" />
     <icon gap:platform="android" gap:qualifier="mdpi" src="www/res/icon/android/icon-48-mdpi.png" />
@@ -88,4 +89,7 @@
     <preference name="xwalkMode" value="embedded" />
     <preference name="xwalkMultipleApk" value="true" />
     <engine name="browser" spec="~4.0.0" />
+    <feature name="Geolocation">
+        <param name="android-package" value="org.apache.cordova.GeoBroker" />
+    </feature>
 </widget>
