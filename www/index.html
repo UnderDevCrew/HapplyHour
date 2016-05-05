@@ -1,4 +1,3 @@
-
 <!doctype html>
 <!--
 @license
@@ -15,75 +14,84 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <head>
 
     <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
-        <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
     <!-- endbuild -->
 
-  <meta charset="utf-8">
-  <meta name="description" content="">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="generator" content="Happly Hour">
-  <title>Happly Hour</title>
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Happly Hour">
+    <title>Happly Hour</title>
 
-  <!-- Place favicon.ico in the `app/` directory -->
-    <link rel="icon" type="image/png" href="favicon.ico" />
-  <!-- Chrome for Android theme color -->
-  <meta name="theme-color" content="#2E3AA1">
+    <!-- Place favicon.ico in the `app/` directory -->
+    <link rel="icon" type="image/png" href="favicon.ico"/>
+    <!-- Chrome for Android theme color -->
+    <meta name="theme-color" content="#2E3AA1">
 
-  <!-- Web Application Manifest -->
-  <link rel="manifest" href="manifest.json">
+    <!-- Web Application Manifest -->
+    <link rel="manifest" href="manifest.json">
 
-  <!-- Tile color for Win8 -->
-  <meta name="msapplication-TileColor" content="#3372DF">
+    <!-- Tile color for Win8 -->
+    <meta name="msapplication-TileColor" content="#3372DF">
 
-  <!-- Add to homescreen for Chrome on Android -->
-  <meta name="mobile-web-app-capable" content="yes">
-  <meta name="application-name" content="PSK">
-  <!--<link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">-->
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PSK">
+    <!--<link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">-->
 
-  <!-- Add to homescreen for Safari on iOS -->
-  <meta name="apple-mobile-web-app-capable" content="yes">
-  <meta name="apple-mobile-web-app-status-bar-style" content="black">
-  <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
-  <!--<link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">-->
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+    <!--<link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">-->
 
-  <!-- Tile icon for Win8 (144x144) -->
-  <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+    <!-- Tile icon for Win8 (144x144) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
 
-  <!-- build:css styles/main.css -->
-  <link rel="stylesheet" href="styles/main.css">
-  <!-- endbuild-->
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild-->
 
 
     <!--<script src="../platforms/browser/www/cordova.js"></script>-->
 
-  <!-- Because this project uses vulcanize this should be your only html import
-       in this file. All other imports should go in elements.html -->
-  <link rel="import" href="elements/elements.html">
+    <!-- Because this project uses vulcanize this should be your only html import
+         in this file. All other imports should go in elements.html -->
+    <link rel="import" href="elements/elements.html">
 
-  <!-- For shared styles, shared-styles.html import in elements.html -->
-  <style is="custom-style" include="shared-styles"></style>
+    <!-- For shared styles, shared-styles.html import in elements.html -->
+    <style is="custom-style" include="shared-styles"></style>
 
-  <!-- Custom style -->
-  <style is="custom-style" include="shared-styles"></style>
+    <!-- Custom style -->
+    <style is="custom-style" include="shared-styles"></style>
 
-  <style is="custom-style">
-    paper-toolbar.custom {
-      --paper-toolbar-background: green;
-    }
-  </style>
+    <style is="custom-style">
+        paper-toolbar.custom {
+            --paper-toolbar-background: green;
+        }
+
+        paper-spinner.multi {
+            position: absolute;
+            margin-left: 75%;
+            margin-top: 5%;
+            z-index: 1000;
+        }
+    </style>
 
 </head>
 
-<body unresolved>
+<body>
 
 <script src="scripts/app.js"></script>
 <script type="text/javascript" charset="utf-8">
 
-    document.addEventListener('WebComponentsReady', function() {
-
+    document.addEventListener('WebComponentsReady', function () {
         var button = document.querySelector('paper-button');
 
-        button.addEventListener('click', function() {
+        button.addEventListener('click', function () {
+            var spinner = document.querySelector('paper-spinner');
+            spinner.active = true;
+
             var options = {
                 enableHighAccuracy: true,
                 maximumAge: 0
@@ -96,19 +104,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             console.warn('ERROR(' + error.code + '): ' + error.message);
 
             var toast = document.querySelector('paper-toast');
+            toast.text = 'something went wrong with your geolocation, please try to activate it or authorize the app and retry :)';
+            toast.duration = 5000;
             toast.open();
         }
 
         function geolocationSuccess(position) {
 
+            var spinner = document.querySelector('paper-spinner');
+            spinner.active = false;
+
             var crd = position.coords;
+
             var gMap = document.querySelector('google-map');
             gMap.fitToMarkers = true;
 
             var start_lat = crd.latitude;
             var start_long = crd.longitude;
 
-            var start = start_lat+','+start_long;
+            var start = start_lat + ',' + start_long;
             var end = '48.2919872,4.0805841';
 
             document.querySelector('google-map-directions').map = gMap.map;
@@ -120,21 +134,36 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </script>
 
-<paper-toolbar class="custom">
-    <paper-icon-button icon="menu" on-tap="menuAction"></paper-icon-button>
-        <div class="title">Happly Hour</div>
-    <paper-icon-button icon="more-vert" on-tap="moreAction">
-    </paper-icon-button>
-</paper-toolbar>
+
+<paper-drawer-panel>
+    <div drawer>
+        <paper-toolbar class="custom">
+            <div>What bar are you looking for ?</div>
+        </paper-toolbar>
 
 
-<paper-button id="button_find_my_bar" raised>For now, Find The Berthom <3 !</paper-button>
+    </div>
 
-<google-map  latitude="37.779" longitude="-122.3892" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map>
-<google-map-directions start-address="" end-address="" travel-mode="WALKING" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
+    <div main>
+        <paper-spinner class="multi"></paper-spinner>
+
+        <paper-toolbar class="custom">
+            <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+            <div class="title">Happly Hour</div>
+        </paper-toolbar>
+
+        <paper-button id="button_find_my_bar" raised>For now, Find The Berthom <3 !</paper-button>
+
+        <google-map latitude="37.779" longitude="-122.3892" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map>
+        <google-map-directions start-address="" end-address="" travel-mode="WALKING"
+                               api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
 
 
-<paper-toast id="toast1" duration="5" text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
+        <paper-toast id="toast1" duration="" text=""></paper-toast>
+
+    </div>
+</paper-drawer-panel>
+
 <!--Api key for android-->
 <!--<google-map disable-default-ui zoom="15" api-key="AIzaSyBu3FBIDdMOjJqRhZCvBQFPvGCiFL1qPzktype">-->
 
