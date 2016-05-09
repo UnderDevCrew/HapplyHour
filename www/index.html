@@ -1,46 +1,172 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
-    Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
-
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
-            </div>
-        </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-    </body>
+
+<html lang="en">
+
+<head>
+
+    <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <!-- endbuild -->
+
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Happly Hour">
+    <title>Happly Hour</title>
+
+    <!-- Place favicon.ico in the `app/` directory -->
+    <link rel="icon" type="image/png" href="favicon.ico"/>
+    <!-- Chrome for Android theme color -->
+    <meta name="theme-color" content="#2E3AA1">
+
+    <!-- Web Application Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Tile color for Win8 -->
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PSK">
+    <!--<link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">-->
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+    <!--<link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">-->
+
+    <!-- Tile icon for Win8 (144x144) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild-->
+
+
+    <!--<script src="../platforms/browser/www/cordova.js"></script>-->
+
+    <!-- Because this project uses vulcanize this should be your only html import
+         in this file. All other imports should go in elements.html -->
+    <link rel="import" href="elements/elements.html">
+
+    <!-- For shared styles, shared-styles.html import in elements.html -->
+    <style is="custom-style" include="shared-styles"></style>
+
+    <!-- Custom style -->
+    <style is="custom-style" include="shared-styles"></style>
+
+    <style is="custom-style">
+        paper-toolbar.custom {
+            --paper-toolbar-background: green;
+        }
+
+        paper-spinner.multi {
+            position: absolute;
+            margin-left: 75%;
+            margin-top: 5%;
+            z-index: 1000;
+        }
+    </style>
+
+</head>
+
+<body>
+
+<script src="scripts/app.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+    document.addEventListener('WebComponentsReady', function () {
+        var button = document.querySelector('paper-button');
+
+        button.addEventListener('click', function () {
+            var spinner = document.querySelector('paper-spinner');
+            spinner.active = true;
+
+            var options = {
+                enableHighAccuracy: true,
+                maximumAge: 0
+            };
+
+            navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
+        });
+
+        function geolocationError(error) {
+            console.warn('ERROR(' + error.code + '): ' + error.message);
+
+            var toast = document.querySelector('paper-toast');
+            toast.text = 'something went wrong with your geolocation, please try to activate it or authorize the app and retry :)';
+            toast.duration = 5000;
+            toast.open();
+        }
+
+        function geolocationSuccess(position) {
+
+            var spinner = document.querySelector('paper-spinner');
+            spinner.active = false;
+
+            var crd = position.coords;
+
+            var gMap = document.querySelector('google-map');
+            gMap.fitToMarkers = true;
+
+            var start_lat = crd.latitude;
+            var start_long = crd.longitude;
+
+            var start = start_lat + ',' + start_long;
+            var end = '48.2919872,4.0805841';
+
+            document.querySelector('google-map-directions').map = gMap.map;
+            document.querySelector('google-map-directions').startAddress = start;
+            document.querySelector('google-map-directions').endAddress = end;
+
+        }
+    });
+
+</script>
+
+
+<paper-drawer-panel>
+    <div drawer>
+        <paper-toolbar class="custom">
+            <div>What bar are you looking for ?</div>
+        </paper-toolbar>
+
+
+    </div>
+
+    <div main>
+        <paper-spinner class="multi"></paper-spinner>
+
+        <paper-toolbar class="custom">
+            <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
+            <div class="title">Happly Hour</div>
+        </paper-toolbar>
+
+        <paper-button id="button_find_my_bar" raised>For now, Find The Berthom <3 !</paper-button>
+
+        <google-map latitude="37.779" longitude="-122.3892" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map>
+        <google-map-directions start-address="" end-address="" travel-mode="WALKING"
+                               api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
+
+
+        <paper-toast id="toast1" duration="" text=""></paper-toast>
+
+    </div>
+</paper-drawer-panel>
+
+<!--Api key for android-->
+<!--<google-map disable-default-ui zoom="15" api-key="AIzaSyBu3FBIDdMOjJqRhZCvBQFPvGCiFL1qPzktype">-->
+
+</body>
+
 </html>

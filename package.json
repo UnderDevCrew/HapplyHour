@@ -6,8 +6,8 @@
     "type": "git",
     "url": "https://github.com/UnderDevCrew/HapplyHour.git"
   },
-  "author": "PhoneGap Team",
-  "license": "private",
+  "author": "UnderDevCrew",
+  "license": "Apache License 2.0",
   "bugs": {
     "url": "https://github.com/UnderDevCrew/HapplyHour/issues"
   },
