@@ -82,6 +82,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             z-index: 1000;
             position: absolute;
             bottom: 5%;
+            left: 2%;
         }
 
     </style>
@@ -97,7 +98,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         var gMap          = document.querySelector('google-map');
         var refreshButton = document.getElementById('refreshButton');
 
-        gMap.addEventListener('google-map-ready', function (e) {
+        gMap.addEventListener('google-map-ready', function () {
             gMap.hidden = true;
         });
 
@@ -105,7 +106,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         var button = document.getElementById('button_find_my_bar');
 
-        button.addEventListener('click', function (e) {
+        button.addEventListener('click', function () {
             var spinner    = document.querySelector('paper-spinner');
             spinner.active = true;
 
@@ -133,10 +134,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var crd           = position.coords;
             var refreshButton = document.getElementById('refreshButton');
             var button        = document.getElementById('button_find_my_bar');
+            var UserMarker    = document.getElementById('user_marker');
 
-            gMap.latitude     = crd.latitude;
-            gMap.longitude    = crd.longitude;
-            gMap.fitToMarkers = true;
+//            gMap.latitude        = crd.latitude;
+//            gMap.longitude       = crd.longitude;
+            UserMarker.latitude  = crd.latitude;
+            UserMarker.longitude = crd.longitude;
+            gMap.zoom            = 15;
+            gMap.fitToMarkers    = true;
 
             gMap.hidden = false;
             gMap.resize();
@@ -144,34 +149,19 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             button.hidden        = true;
             refreshButton.hidden = false;
             spinner.active       = false;
+            var options          = {
+                enableHighAccuracy: true,
+                maximumAge: 0
+            };
 
+            refreshButton.addEventListener('click', function () {
+                navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
+            });
 
-//            var start_lat = crd.latitude;
-//            var start_long = crd.longitude;
-//
-//            var start = start_lat + ',' + start_long;
-//            var end = '48.2919872,4.0805841';
-//
-//            var gDirection = document.querySelector('google-map-directions');
-//
-//            gDirection.map = gMap.map;
-//            gDirection.startAddress = start;
-//            gDirection.endAddress = end;
-//
-//            var bar_choice = document.getElementById('bar_button');
-//
-//            bar_choice.addEventListener('click', function(){
-//                console.log('bite');
-//                var modalAlert = document.getElementById('modalAlert');
-//                modalAlert.toggle();
-//            });
         }
     });
 
 </script>
-
-<!--<paper-button id="bar_button" raised >Berthom</paper-button>-->
-
 
 <paper-toolbar class="custom">
     <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
@@ -183,7 +173,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <paper-spinner class="multi"></paper-spinner>
 
 
-<google-map latitude="37.779" longitude="-122.3892" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ">
+<google-map latitude="37.779" longitude="-122.3892" zoom="" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ">
+    <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
+        <p>Yeah... it's you.</p>
+    </google-map-marker>
     <paper-fab id="refreshButton" icon="refresh" title="heart"></paper-fab>
 </google-map>
 
