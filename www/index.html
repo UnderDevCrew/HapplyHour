@@ -68,6 +68,9 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style is="custom-style">
         paper-toolbar.custom {
             --paper-toolbar-background: var(--paper-green-700);
+            --paper-toolbar-title: {
+                font-weight: bold;
+            };
         }
 
         paper-spinner.multi {
@@ -85,6 +88,22 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             left: 2%;
         }
 
+        .container {
+            @apply(--layout-flex);
+            @apply(--layout-vertical);
+            width: 100%;
+            height: 100%;
+        }
+
+        paper-tabs {
+
+            --paper-tabs-selection-bar-color: var(--paper-green-700);
+            --paper-tabs-selection-bar: {
+                height: 4px;
+            }
+        }
+
+
     </style>
 </head>
 
@@ -94,15 +113,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script type="text/javascript" charset="utf-8">
 
     document.addEventListener('WebComponentsReady', function () {
-
-        var gMap          = document.querySelector('google-map');
-        var refreshButton = document.getElementById('refreshButton');
-
-        gMap.addEventListener('google-map-ready', function () {
-            gMap.hidden = true;
-        });
-
-        refreshButton.hidden = true;
 
         var button = document.getElementById('button_find_my_bar');
 
@@ -133,21 +143,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var refreshButton = document.getElementById('refreshButton');
             var button        = document.getElementById('button_find_my_bar');
             var UserMarker    = document.getElementById('user_marker');
+            var pages         = document.querySelector('iron-pages');
+            var tabs          = document.querySelector('paper-tabs');
 
 //            gMap.latitude        = crd.latitude;
 //            gMap.longitude       = crd.longitude;
             UserMarker.latitude  = crd.latitude;
             UserMarker.longitude = crd.longitude;
-            gMap.zoom            = 15;
-            gMap.fitToMarkers    = true;
 
-            gMap.hidden = false;
+            gMap.zoom         = 15;
+            gMap.fitToMarkers = true;
+            gMap.hidden       = false;
             gMap.resize();
 
+            tabs.hidden          = false;
             button.hidden        = true;
             refreshButton.hidden = false;
             spinner.active       = false;
-            var options          = {
+
+            var options = {
                 enableHighAccuracy: true,
                 maximumAge: 0
             };
@@ -156,13 +170,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
             });
 
+            tabs.addEventListener('iron-select', function () {
+                pages.selected = tabs.selected;
+            });
         }
     });
 
 </script>
 
 <paper-toolbar class="custom">
-    <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
     <div class="title">Happly Hour</div>
 </paper-toolbar>
 
@@ -171,15 +187,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <paper-spinner class="multi"></paper-spinner>
 
 
-<google-map latitude="37.779" longitude="-122.3892" zoom="" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ">
-    <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
-        <p>Yeah... it's you.</p>
-    </google-map-marker>
-    <paper-fab id="refreshButton" icon="refresh" title="heart"></paper-fab>
-</google-map>
+<paper-tabs selected="0" hidden="true">
+    <paper-tab>MAPS</paper-tab>
+    <paper-tab>CARDS</paper-tab>
+</paper-tabs>
 
-<google-map-directions start-address="" end-address="" travel-mode="WALKING"
-                       api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
+<iron-pages selected="0" class="container">
+
+    <div class="container">
+        <google-map latitude="37.779" longitude="-122.3892" zoom="" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"
+                    id="map" hidden="true">
+            <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
+                <p>Yeah... it's you.</p>
+            </google-map-marker>
+            <paper-fab id="refreshButton" icon="refresh" title="heart" hidden="true"></paper-fab>
+        </google-map>
+
+        <google-map-directions start-address="" end-address="" travel-mode="WALKING"
+                               api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
+    </div>
+
+    <div>
+        <p>Some cards will be displayed here when the API will be linked</p>
+    </div>
+
+
+</iron-pages>
 
 
 <paper-toast id="gelocationError" duration="5000" text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
