@@ -90,6 +90,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
         paper-fab {
             --paper-fab-background: var(--paper-green-700);
+            --paper-fab-keyboard-focus-background : var(--paper-green-800);
             z-index: 1000;
             position: absolute;
             bottom: 5%;
@@ -252,7 +253,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                     <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
                         <p>Yeah... it's you.</p>
                     </google-map-marker>
-                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true" noink="false"></paper-fab>
+                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true" noink="false" focused="false"></paper-fab>
                 </google-map>
 
                 <google-map-directions start-address="" end-address="" travel-mode="WALKING"
