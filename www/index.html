@@ -103,18 +103,32 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         }
 
-
+        .cafe-header { @apply(--paper-font-headline); }
+        .cafe-light { color: var(--paper-grey-600); }
+        .cafe-location {
+            float: right;
+            font-size: 15px;
+            vertical-align: middle;
+        }
+        .cafe-reserve { color: var(--google-blue-500); }
+        iron-icon.star {
+            --iron-icon-width: 16px;
+            --iron-icon-height: 16px;
+            color: var(--paper-amber-500);
+        }
+        iron-icon.star:last-of-type { color: var(--paper-grey-500); }
     </style>
+
 </head>
 
-<body>
+<body class="fullbleed layout vertical">
 
 <script src="scripts/app.js"></script>
 <script type="text/javascript" charset="utf-8">
 
     document.addEventListener('WebComponentsReady', function () {
 
-        var button = document.getElementById('button_find_my_bar');
+        var button = document.getElementById('barFinder');
 
         button.addEventListener('click', function () {
             var spinner    = document.querySelector('paper-spinner');
@@ -141,7 +155,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var gMap          = document.querySelector('google-map');
             var crd           = position.coords;
             var refreshButton = document.getElementById('refreshButton');
-            var button        = document.getElementById('button_find_my_bar');
+            var button        = document.getElementById('barFinder');
             var UserMarker    = document.getElementById('user_marker');
             var pages         = document.querySelector('iron-pages');
             var tabs          = document.querySelector('paper-tabs');
@@ -178,44 +192,105 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </script>
 
-<paper-toolbar class="custom">
-    <div class="title">Happly Hour</div>
-</paper-toolbar>
+<!-- TODO: changer cette merde d'affichage de mes couilles de fdp / 0px de merde  -->
 
-<paper-button id="button_find_my_bar" raised>Find bars around me</paper-button>
+<paper-header-panel mode="waterfall">
+    <div class="paper-header">
+        <paper-toolbar class="custom paper-header" justify="center" >
+            <div class="title">Happly Hour</div>
+        </paper-toolbar>
 
-<paper-spinner class="multi"></paper-spinner>
+        <paper-button id="barFinder" raised>Find bars around me</paper-button>
 
 
-<paper-tabs selected="0" hidden="true">
-    <paper-tab>MAPS</paper-tab>
-    <paper-tab>CARDS</paper-tab>
-</paper-tabs>
-
-<iron-pages selected="0" class="container">
-
-    <div class="container">
-        <google-map latitude="37.779" longitude="-122.3892" zoom="" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"
-                    id="map" hidden="true">
-            <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
-                <p>Yeah... it's you.</p>
-            </google-map-marker>
-            <paper-fab id="refreshButton" icon="refresh" title="heart" hidden="true"></paper-fab>
-        </google-map>
-
-        <google-map-directions start-address="" end-address="" travel-mode="WALKING"
-                               api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
+        <paper-tabs selected="0" hidden="true">
+            <paper-tab>MAPS</paper-tab>
+            <paper-tab>CARDS</paper-tab>
+        </paper-tabs>
     </div>
 
-    <div>
-        <p>Some cards will be displayed here when the API will be linked</p>
-    </div>
+    <div class="fit">
+
+        <paper-spinner class="multi"></paper-spinner>
+
+        <iron-pages selected="0" class="container">
+
+            <div class="container">
+                <google-map latitude="37.779" longitude="-122.3892" zoom="" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"
+                            id="map" hidden="true">
+                    <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
+                        <p>Yeah... it's you.</p>
+                    </google-map-marker>
+                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true"></paper-fab>
+                </google-map>
+
+                <google-map-directions start-address="" end-address="" travel-mode="WALKING"
+                                       api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
+            </div>
+
+            <div>
+                <paper-card image="http://placehold.it/200x75/FFC107/000000" style="margin-bottom:12px;">
+                    <div class="card-content">
+                        <div class="cafe-header">Cafe Basilico
+                            <div class="cafe-location cafe-light">
+                                <iron-icon icon="communication:location-on"></iron-icon>
+                                <span>250ft</span>
+                            </div>
+                        </div>
+                        <div class="cafe-rating">
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                        </div>
+                        <p>$・Italian, Cafe</p>
+                        <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12 indoor seats plus patio seating.</p>
+                    </div>
+                    <div class="card-actions">
+
+                        <paper-button class="cafe-reserve">View on map</paper-button>
+                    </div>
+                </paper-card>
+
+                <paper-card image="http://placehold.it/200x75/FFC107/000000" style="margin-bottom:12px;">
+                    <div class="card-content">
+                        <div class="cafe-header">Cafe Basilico
+                            <div class="cafe-location cafe-light">
+                                <iron-icon icon="communication:location-on"></iron-icon>
+                                <span>250ft</span>
+                            </div>
+                        </div>
+                        <div class="cafe-rating">
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                        </div>
+                        <p>$・Italian, Cafe</p>
+                        <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12 indoor seats plus patio seating.</p>
+                    </div>
+                    <div class="card-actions">
+
+                        <paper-button class="cafe-reserve">View on map</paper-button>
+                    </div>
+                </paper-card>
+
+            </div>
 
 
-</iron-pages>
+        </iron-pages>
 
 
 <paper-toast id="gelocationError" duration="5000" text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
+        <paper-toast id="toast1" duration="" text=""></paper-toast>
+    </div>
+</paper-header-panel>
+
+
+
+
 
 <!--Api key for android-->
 <!--<google-map disable-default-ui zoom="15" api-key="AIzaSyBu3FBIDdMOjJqRhZCvBQFPvGCiFL1qPzktype">-->
