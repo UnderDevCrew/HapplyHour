@@ -121,9 +121,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         function geolocationError(error) {
             console.warn('ERROR(' + error.code + '): ' + error.message);
 
-            var toast      = document.querySelector('paper-toast');
-            toast.text     = 'something went wrong with your geolocation, please try to activate it or authorize the app and retry :)';
-            toast.duration = 5000;
+            var toast      = document.getElementById('gelocationError');
             toast.open();
         }
 
@@ -184,7 +182,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                        api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
 
 
-<paper-toast id="toast1" duration="" text=""></paper-toast>
+<paper-toast id="gelocationError" duration="5000" text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
 
 <!--Api key for android-->
 <!--<google-map disable-default-ui zoom="15" api-key="AIzaSyBu3FBIDdMOjJqRhZCvBQFPvGCiFL1qPzktype">-->
