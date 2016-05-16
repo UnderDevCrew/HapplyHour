@@ -72,6 +72,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             height: 100%;
             margin: 0;
         }
+
         paper-scroll-header-panel {
             height: 100%;
         }
@@ -84,10 +85,11 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
         paper-spinner.multi {
-            position: absolute;
-            margin-left: 50%;
-            margin-top: 50%;
-            z-index: 1000;
+            /*position: absolute;*/
+            /*margin-left: 50%;*/
+            /*margin-top: 50%;*/
+            display:block;
+            /*z-index: 1000;*/
         }
 
         paper-fab {
@@ -98,7 +100,7 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             left: 2%;
         }
 
-        .container {
+        .containerCustom {
             @apply(--layout-flex);
             @apply(--layout-vertical);
             width: 100%;
@@ -113,25 +115,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             }
         }
 
-        .cafe-header { @apply(--paper-font-headline); }
-        .cafe-light { color: var(--paper-grey-600); }
+        .flex-center-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-justified);
+            @apply(--layout-vertical-center);
+        }
+
+        .cafe-header {
+            @apply(--paper-font-headline);
+        }
+
+        .cafe-light {
+            color: var(--paper-grey-600);
+        }
+
         .cafe-location {
             float: right;
             font-size: 15px;
             vertical-align: middle;
         }
-        .cafe-reserve { color: var(--google-blue-500); }
+
+        .cafe-reserve {
+            color: var(--google-blue-500);
+        }
+
         iron-icon.star {
             --iron-icon-width: 16px;
             --iron-icon-height: 16px;
             color: var(--paper-amber-500);
         }
-        iron-icon.star:last-of-type { color: var(--paper-grey-500); }
+
+        iron-icon.star:last-of-type {
+            color: var(--paper-grey-500);
+        }
+
     </style>
 
 </head>
 
-<body class="custom">
+<body unresolved>
 
 <script src="scripts/app.js"></script>
 <script type="text/javascript" charset="utf-8">
@@ -165,23 +187,24 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var gMap          = document.querySelector('google-map');
             var crd           = position.coords;
             var refreshButton = document.getElementById('refreshButton');
-            var button        = document.getElementById('barFinder');
             var UserMarker    = document.getElementById('user_marker');
             var pages         = document.querySelector('iron-pages');
             var tabs          = document.getElementById('headerTabs');
+            var finderMenu    = document.getElementById('finderMenu');
 
 //            gMap.latitude        = crd.latitude;
 //            gMap.longitude       = crd.longitude;
             UserMarker.latitude  = crd.latitude;
             UserMarker.longitude = crd.longitude;
 
+            finderMenu.hidden = true;
             gMap.zoom         = 15;
             gMap.fitToMarkers = true;
             gMap.hidden       = false;
             gMap.resize();
 
-            tabs.hidden          = false;
-            button.hidden        = true;
+            tabs.hidden = false;
+            tabs.notifyResize();
             refreshButton.hidden = false;
             spinner.active       = false;
 
@@ -202,99 +225,104 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
 </script>
 
-<paper-scroll-header-panel fixed="true">
-    <div class="paper-header">
-        <paper-toolbar class="custom paper-header" justify="center" >
-            <div class="title">Happly Hour</div>
-        </paper-toolbar>
+<paper-scroll-header-panel fixed="true" shadow="true">
+    <div class="paper-header" shadow="true">
 
-        <paper-button id="barFinder" raised>Find bars around me</paper-button>
+            <paper-toolbar class="custom paper-header" justify="center">
+                <div class="title">Happly Hour</div>
+            </paper-toolbar>
 
-
-        <paper-tabs selected="0" hidden="true" id="headerTabs">
-            <paper-tab>MAPS</paper-tab>
-            <paper-tab>CARDS</paper-tab>
-        </paper-tabs>
+            <paper-tabs selected="0" hidden="true" id="headerTabs">
+                <paper-tab>MAPS</paper-tab>
+                <paper-tab>CARDS</paper-tab>
+            </paper-tabs>
     </div>
 
-    <div class="container">
 
-        <paper-spinner class="multi"></paper-spinner>
+    <div class="containerCustom">
 
-        <iron-pages selected="0" class="container">
+        <iron-pages selected="0" class="containerCustom">
 
-            <div class="container">
-                <google-map latitude="37.779" longitude="-122.3892" zoom="" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"
+            <div class="containerCustom">
+
+                <div class="flex-center-justified" id="finderMenu">
+                    <paper-button id="barFinder" raised class="">Find bars around me</paper-button>
+                    <paper-spinner class="multi" ></paper-spinner>
+                </div>
+
+                <google-map latitude="37.779" longitude="-122.3892" zoom=""
+                            api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"
                             id="map" hidden="true">
                     <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
                         <p>Yeah... it's you.</p>
                     </google-map-marker>
-                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true"></paper-fab>
+                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true" noink="false"></paper-fab>
                 </google-map>
 
                 <google-map-directions start-address="" end-address="" travel-mode="WALKING"
                                        api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
-    </div>
+            </div>
 
-        <div>
-            <paper-card image="http://placehold.it/200x75/FFC107/000000" style="margin-bottom:12px;">
-                <div class="card-content">
-                    <div class="cafe-header">Cafe Basilico
-                        <div class="cafe-location cafe-light">
-                            <iron-icon icon="communication:location-on"></iron-icon>
-                            <span>250ft</span>
+            <div>
+                <paper-card image="http://placehold.it/250x125/FFC107/000000" style="margin-bottom:12px;">
+                    <div class="card-content">
+                        <div class="cafe-header">Cafe Basilico
+                            <div class="cafe-location cafe-light">
+                                <iron-icon icon="communication:location-on"></iron-icon>
+                                <span>250ft</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="cafe-rating">
-                        <iron-icon class="star" icon="star"></iron-icon>
-                        <iron-icon class="star" icon="star"></iron-icon>
-                        <iron-icon class="star" icon="star"></iron-icon>
-                        <iron-icon class="star" icon="star"></iron-icon>
-                        <iron-icon class="star" icon="star"></iron-icon>
-                    </div>
-                    <p>$・Italian, Cafe</p>
-                    <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12 indoor seats plus patio seating.</p>
-                </div>
-                <div class="card-actions">
-
-                    <paper-button class="cafe-reserve">View on map</paper-button>
-                </div>
-            </paper-card>
-
-            <paper-card image="http://placehold.it/200x75/FFC107/000000" style="margin-bottom:12px;">
-                <div class="card-content">
-                    <div class="cafe-header">Cafe Basilico
-                        <div class="cafe-location cafe-light">
-                            <iron-icon icon="communication:location-on"></iron-icon>
-                            <span>250ft</span>
+                        <div class="cafe-rating">
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
                         </div>
+                        <p>$・Italian, Cafe</p>
+
+                        <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12
+                            indoor seats plus patio seating.</p>
                     </div>
-                    <div class="cafe-rating">
-                        <iron-icon class="star" icon="star"></iron-icon>
-                        <iron-icon class="star" icon="star"></iron-icon>
-                        <iron-icon class="star" icon="star"></iron-icon>
-                        <iron-icon class="star" icon="star"></iron-icon>
-                        <iron-icon class="star" icon="star"></iron-icon>
+                    <div class="card-actions">
+
+                        <paper-button class="cafe-reserve">View on map</paper-button>
                     </div>
-                    <p>$・Italian, Cafe</p>
-                    <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12 indoor seats plus patio seating.</p>
-                </div>
-                <div class="card-actions">
+                </paper-card>
 
-                    <paper-button class="cafe-reserve">View on map</paper-button>
-                </div>
-            </paper-card>
+                <paper-card image="http://placehold.it/200x75/FFC107/000000" style="margin-bottom:12px;">
+                    <div class="card-content">
+                        <div class="cafe-header">Cafe Basilico
+                            <div class="cafe-location cafe-light">
+                                <iron-icon icon="communication:location-on"></iron-icon>
+                                <span>250ft</span>
+                            </div>
+                        </div>
+                        <div class="cafe-rating">
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                        </div>
+                        <p>$・Italian, Cafe</p>
 
-        </div>
+                        <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12
+                            indoor seats plus patio seating.</p>
+                    </div>
+                    <div class="card-actions">
 
-
+                        <paper-button class="cafe-reserve">View on map</paper-button>
+                    </div>
+                </paper-card>
+            </div>
         </iron-pages>
 
 
-        <paper-toast id="geolocationError" duration="5000" text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
+        <paper-toast id="geolocationError" duration="5000"
+                     text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
     </div>
 </paper-scroll-header-panel>
-
 
 
 
