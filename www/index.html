@@ -66,45 +66,98 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
     <style is="custom-style" include="shared-styles"></style>
 
     <style is="custom-style">
+
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        paper-scroll-header-panel {
+            height: 100%;
+        }
+
         paper-toolbar.custom {
             --paper-toolbar-background: var(--paper-green-700);
+            --paper-toolbar-title: {
+                font-weight: bold;
+            };
         }
 
         paper-spinner.multi {
-            position: absolute;
-            margin-left: 50%;
-            margin-top: 50%;
-            z-index: 1000;
+            display:block;
         }
 
         paper-fab {
             --paper-fab-background: var(--paper-green-700);
+            --paper-fab-keyboard-focus-background : var(--paper-green-800);
             z-index: 1000;
             position: absolute;
             bottom: 5%;
             left: 2%;
         }
 
+        .containerCustom {
+            @apply(--layout-flex);
+            @apply(--layout-vertical);
+            width: 100%;
+            height: 100%;
+        }
+
+        paper-tabs {
+
+            --paper-tabs-selection-bar-color: var(--paper-green-700);
+            --paper-tabs-selection-bar: {
+                height: 4px;
+            }
+        }
+
+        .flex-center-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-justified);
+            @apply(--layout-vertical-center);
+        }
+
+        .cafe-header {
+            @apply(--paper-font-headline);
+        }
+
+        .cafe-light {
+            color: var(--paper-grey-600);
+        }
+
+        .cafe-location {
+            float: right;
+            font-size: 15px;
+            vertical-align: middle;
+        }
+
+        .cafe-reserve {
+            color: var(--google-blue-500);
+        }
+
+        iron-icon.star {
+            --iron-icon-width: 16px;
+            --iron-icon-height: 16px;
+            color: var(--paper-amber-500);
+        }
+
+        iron-icon.star:last-of-type {
+            color: var(--paper-grey-500);
+        }
+
     </style>
+
 </head>
 
-<body>
+<body unresolved>
 
 <script src="scripts/app.js"></script>
 <script type="text/javascript" charset="utf-8">
 
     document.addEventListener('WebComponentsReady', function () {
 
-        var gMap          = document.querySelector('google-map');
-        var refreshButton = document.getElementById('refreshButton');
-
-        gMap.addEventListener('google-map-ready', function () {
-            gMap.hidden = true;
-        });
-
-        refreshButton.hidden = true;
-
-        var button = document.getElementById('button_find_my_bar');
+        var button = document.getElementById('barFinder');
 
         button.addEventListener('click', function () {
             var spinner    = document.querySelector('paper-spinner');
@@ -131,23 +184,28 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             var gMap          = document.querySelector('google-map');
             var crd           = position.coords;
             var refreshButton = document.getElementById('refreshButton');
-            var button        = document.getElementById('button_find_my_bar');
             var UserMarker    = document.getElementById('user_marker');
+            var pages         = document.querySelector('iron-pages');
+            var tabs          = document.getElementById('headerTabs');
+            var finderMenu    = document.getElementById('finderMenu');
 
 //            gMap.latitude        = crd.latitude;
 //            gMap.longitude       = crd.longitude;
             UserMarker.latitude  = crd.latitude;
             UserMarker.longitude = crd.longitude;
-            gMap.zoom            = 15;
-            gMap.fitToMarkers    = true;
 
-            gMap.hidden = false;
+            finderMenu.hidden = true;
+            gMap.zoom         = 15;
+            gMap.fitToMarkers = true;
+            gMap.hidden       = false;
             gMap.resize();
 
-            button.hidden        = true;
+            tabs.hidden = false;
+            tabs.notifyResize();
             refreshButton.hidden = false;
             spinner.active       = false;
-            var options          = {
+
+            var options = {
                 enableHighAccuracy: true,
                 maximumAge: 0
             };
@@ -156,33 +214,115 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
                 navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
             });
 
+            tabs.addEventListener('iron-select', function () {
+                pages.selected = tabs.selected;
+            });
         }
     });
 
 </script>
 
-<paper-toolbar class="custom">
-    <paper-icon-button icon="menu" paper-drawer-toggle></paper-icon-button>
-    <div class="title">Happly Hour</div>
-</paper-toolbar>
+<paper-scroll-header-panel fixed="true">
+    <div class="paper-header">
 
-<paper-button id="button_find_my_bar" raised>Find bars around me</paper-button>
+            <paper-toolbar class="custom paper-header" justify="center">
+                <div class="title">Happly Hour</div>
+            </paper-toolbar>
 
-<paper-spinner class="multi"></paper-spinner>
-
-
-<google-map latitude="37.779" longitude="-122.3892" zoom="" api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ">
-    <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
-        <p>Yeah... it's you.</p>
-    </google-map-marker>
-    <paper-fab id="refreshButton" icon="refresh" title="heart"></paper-fab>
-</google-map>
-
-<google-map-directions start-address="" end-address="" travel-mode="WALKING"
-                       api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
+            <paper-tabs selected="0" hidden="true" id="headerTabs">
+                <paper-tab>MAPS</paper-tab>
+                <paper-tab>CARDS</paper-tab>
+            </paper-tabs>
+    </div>
 
 
-<paper-toast id="gelocationError" duration="5000" text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
+    <div class="containerCustom">
+
+        <iron-pages selected="0" class="containerCustom">
+
+            <div class="containerCustom">
+
+                <div class="flex-center-justified" id="finderMenu">
+                    <paper-button id="barFinder" raised class="">Find bars around me</paper-button>
+                    <paper-spinner class="multi" ></paper-spinner>
+                </div>
+
+                <google-map latitude="37.779" longitude="-122.3892" zoom=""
+                            api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"
+                            id="map" hidden="true">
+                    <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
+                        <p>Yeah... it's you.</p>
+                    </google-map-marker>
+                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true" noink="false" focused="false"></paper-fab>
+                </google-map>
+
+                <google-map-directions start-address="" end-address="" travel-mode="WALKING"
+                                       api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
+            </div>
+
+            <div>
+                <paper-card image="http://placehold.it/250x125/FFC107/000000" style="margin-bottom:12px;">
+                    <div class="card-content">
+                        <div class="cafe-header">Cafe Basilico
+                            <div class="cafe-location cafe-light">
+                                <iron-icon icon="communication:location-on"></iron-icon>
+                                <span>250ft</span>
+                            </div>
+                        </div>
+                        <div class="cafe-rating">
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                        </div>
+                        <p>$・Italian, Cafe</p>
+
+                        <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12
+                            indoor seats plus patio seating.</p>
+                    </div>
+                    <div class="card-actions">
+
+                        <paper-button class="cafe-reserve">View on map</paper-button>
+                    </div>
+                </paper-card>
+
+                <paper-card image="http://placehold.it/200x75/FFC107/000000" style="margin-bottom:12px;">
+                    <div class="card-content">
+                        <div class="cafe-header">Cafe Basilico
+                            <div class="cafe-location cafe-light">
+                                <iron-icon icon="communication:location-on"></iron-icon>
+                                <span>250ft</span>
+                            </div>
+                        </div>
+                        <div class="cafe-rating">
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                            <iron-icon class="star" icon="star"></iron-icon>
+                        </div>
+                        <p>$・Italian, Cafe</p>
+
+                        <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12
+                            indoor seats plus patio seating.</p>
+                    </div>
+                    <div class="card-actions">
+
+                        <paper-button class="cafe-reserve">View on map</paper-button>
+                    </div>
+                </paper-card>
+            </div>
+        </iron-pages>
+
+
+        <paper-toast id="geolocationError" duration="5000"
+                     text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
+    </div>
+</paper-scroll-header-panel>
+
+
+
 
 <!--Api key for android-->
 <!--<google-map disable-default-ui zoom="15" api-key="AIzaSyBu3FBIDdMOjJqRhZCvBQFPvGCiFL1qPzktype">-->
