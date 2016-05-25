@@ -205,8 +205,7 @@ document.addEventListener('WebComponentsReady', function () {
         var ajaxElement   = document.getElementById('ajax-bars');
         var gDirection    = document.querySelector('google-map-directions');
 
-//        ajaxElement.url     = "http://api.happlyhour.io/bars";
-        ajaxElement.url     = "http://198.199.124.250/bars";
+        ajaxElement.url     = "http://api.happlyhour.io/bars";
         ajaxElement.params  = {"latitude": crd.latitude, "longitude": crd.longitude};
         ajaxElement.verbose = true;
 
