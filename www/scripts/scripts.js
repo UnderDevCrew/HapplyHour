@@ -1,7 +1,7 @@
 /**
  * Created by Evergreen on 5/25/16.
  */
-function createCards(response, parent, gMap, gDirection, tabs, url)
+function createCards(response, parent, gMap, gDirection, tabs, crd)
 {
     for (var place in response.places) {
 
