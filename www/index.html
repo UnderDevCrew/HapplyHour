@@ -85,12 +85,12 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
         }
 
         paper-spinner.multi {
-            display:block;
+            display: block;
         }
 
         paper-fab {
             --paper-fab-background: var(--paper-green-700);
-            --paper-fab-keyboard-focus-background : var(--paper-green-800);
+            --paper-fab-keyboard-focus-background: var(--paper-green-800);
             z-index: 1000;
             position: absolute;
             bottom: 5%;
@@ -118,32 +118,45 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             @apply(--layout-vertical-center);
         }
 
-        .cafe-header {
+        .cafe-reserve {
+            color: var(--paper-green-800);
+        }
+
+        paper-card.rate {
+            @apply(--layout-horizontal);
+        }
+
+        .rate-image {
+            width: 100px;
+            height: auto;
+            background-size: cover;
+        }
+
+        .rate-content {
+            @apply(--layout-flex);
+            float: left;
+        }
+
+        .rate-header {
             @apply(--paper-font-headline);
         }
 
-        .cafe-light {
+        .rate-name {
             color: var(--paper-grey-600);
+            margin: 10px 0;
         }
 
-        .cafe-location {
-            float: right;
-            font-size: 15px;
-            vertical-align: middle;
+        paper-icon-button.rate-icon {
+            --iron-icon-fill-color: white;
+            --iron-icon-stroke-color: var(--paper-grey-600);
         }
 
-        .cafe-reserve {
-            color: var(--google-blue-500);
+        .yellowStars {
+            --iron-icon-fill-color: yellow;
         }
 
-        iron-icon.star {
-            --iron-icon-width: 16px;
-            --iron-icon-height: 16px;
-            color: var(--paper-amber-500);
-        }
-
-        iron-icon.star:last-of-type {
-            color: var(--paper-grey-500);
+        .greyStars {
+            --iron-icon-fill-color: white;
         }
 
     </style>
@@ -155,86 +168,185 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 <script src="scripts/app.js"></script>
 <script type="text/javascript" charset="utf-8">
 
-    document.addEventListener('WebComponentsReady', function () {
+document.addEventListener('WebComponentsReady', function () {
 
-        var button = document.getElementById('barFinder');
+    var button = document.getElementById('barFinder');
 
-        button.addEventListener('click', function () {
-            var spinner    = document.querySelector('paper-spinner');
-            spinner.active = true;
+    button.addEventListener('click', function () {
+        var spinner    = document.querySelector('paper-spinner');
+        spinner.active = true;
 
-            var options = {
-                enableHighAccuracy: true,
-                maximumAge: 0
-            };
+        var options = {
+            enableHighAccuracy: true,
+            maximumAge: 0
+        };
 
+        navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
+    });
+
+    function geolocationError(error) {
+        console.warn('ERROR(' + error.code + '): ' + error.message);
+
+        var toast = document.getElementById('gelocationError');
+        toast.open();
+    }
+
+    function geolocationSuccess(position) {
+
+        var spinner       = document.querySelector('paper-spinner');
+        var gMap          = document.querySelector('google-map');
+        var crd           = position.coords;
+        var refreshButton = document.getElementById('refreshButton');
+        var UserMarker    = document.getElementById('user_marker');
+        var pages         = document.querySelector('iron-pages');
+        var tabs          = document.getElementById('headerTabs');
+        var finderMenu    = document.getElementById('finderMenu');
+        var ajaxElement   = document.getElementById('ajax-bars');
+
+        ajaxElement.url     = "http://api.happlyhour.io/bars";
+        ajaxElement.params  = {"latitude": crd.latitude, "longitude": crd.longitude};
+        ajaxElement.verbose = true;
+        ajaxElement.addEventListener('response', function (request) {
+
+            var aReponseApi = request.detail.response;
+            var hostElement = document.getElementById('paperCard');
+
+            for (var place in aReponseApi.places) {
+
+                tabs.notifyResize();
+
+                var placeInScope                    = aReponseApi.places[place];
+                var paperCardElement                = document.createElement('paper-card');
+                paperCardElement.innerHTML          = '';
+                paperCardElement.className          = 'rate';
+                paperCardElement.style.marginBottom = '12px';
+
+                var divRateContent       = document.createElement('div');
+                divRateContent.className = 'rate-content';
+
+                var divCardContent       = document.createElement('div');
+                divCardContent.className = 'card-content';
+
+                var divRateHeader       = document.createElement('div');
+                divRateHeader.className = 'rate-header';
+                divRateHeader.innerHTML = placeInScope.name;
+
+                var divRateName       = document.createElement('div');
+                divRateName.className = 'rate-name';
+                divRateName.innerHTML = placeInScope.shortAddress;
+
+                divCardContent.appendChild(divRateHeader);
+                divCardContent.appendChild(divRateName);
+
+                var divCardActions       = document.createElement('div');
+                divCardActions.className = 'card-actions';
+
+                var ite = Math.round(placeInScope.note === null ? placeInScope.note = 0 : placeInScope.note);
+                var restIte = 5 - ite;
+
+                for (var i = 0; i < ite; i++) {
+
+                    var paperIconButton       = document.createElement('paper-icon-button');
+                    paperIconButton.className = 'rate-icon yellowStar';
+
+                    paperIconButton.setAttribute('icon', 'star');
+                    divCardActions.appendChild(paperIconButton);
+                }
+                for (var i = 0; i < restIte; i++) {
+
+                    var paperIconButton       = document.createElement('paper-icon-button');
+                    paperIconButton.className = 'rate-icon greyStars';
+
+                    paperIconButton.setAttribute('icon', 'star');
+                    divCardActions.appendChild(paperIconButton);
+                }
+
+                var paperButtonReserve          = document.createElement('paper-button');
+                paperButtonReserve.innerHTML    = 'GO';
+                paperButtonReserve.raised       = true;
+                paperButtonReserve.className    = 'cafe-reserve';
+                paperButtonReserve.dataset.lat  = placeInScope.latitude;
+                paperButtonReserve.dataset.long = placeInScope.longitude;
+                paperButtonReserve.addEventListener('click', function () {
+
+                    var end_lat                                         = this.dataset.lat;
+                    var end_long                                        = this.dataset.long;
+                    var start                                           = crd.latitude + ',' + crd.longitude;
+                    var end                                             = end_lat + ',' + end_long;
+                    document.querySelector('google-map-directions').map = gMap.map;
+
+                    var gDirection          = document.querySelector('google-map-directions');
+                    gDirection.startAddress = start;
+                    gDirection.endAddress   = end;
+
+                    gMap.fitToMarkers = true;
+                    gDirection.zoom   = 15;
+                    gMap.resize();
+
+                    tabs.animated = true;
+                    tabs.selected = 0;
+                    tabs.notifyResize();
+                });
+
+                divCardActions.appendChild(paperButtonReserve);
+                divRateContent.appendChild(divCardContent);
+                divRateContent.appendChild(divCardActions);
+
+                var divRateImage                  = document.createElement('div');
+                divRateImage.className            = 'rate-image';
+                divRateImage.style.background     = "url(" + placeInScope.photos[0] + ") cover";
+                divRateImage.style.backgroundSize = 'cover';
+
+                paperCardElement.appendChild(divRateContent);
+                paperCardElement.appendChild(divRateImage);
+                hostElement.appendChild(paperCardElement);
+
+            }
+
+        });
+
+        UserMarker.latitude  = crd.latitude;
+        UserMarker.longitude = crd.longitude;
+
+        finderMenu.hidden = true;
+        gMap.zoom         = 15;
+        gMap.fitToMarkers = true;
+        gMap.hidden       = false;
+        gMap.resize();
+
+        tabs.hidden = false;
+        tabs.notifyResize();
+        refreshButton.hidden = false;
+        spinner.active       = false;
+
+        var options = {
+            enableHighAccuracy: true,
+            maximumAge: 0
+        };
+
+        refreshButton.addEventListener('click', function () {
             navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
         });
 
-        function geolocationError(error) {
-            console.warn('ERROR(' + error.code + '): ' + error.message);
-
-            var toast      = document.getElementById('gelocationError');
-            toast.open();
-        }
-
-        function geolocationSuccess(position) {
-
-            var spinner       = document.querySelector('paper-spinner');
-            var gMap          = document.querySelector('google-map');
-            var crd           = position.coords;
-            var refreshButton = document.getElementById('refreshButton');
-            var UserMarker    = document.getElementById('user_marker');
-            var pages         = document.querySelector('iron-pages');
-            var tabs          = document.getElementById('headerTabs');
-            var finderMenu    = document.getElementById('finderMenu');
-
-//            gMap.latitude        = crd.latitude;
-//            gMap.longitude       = crd.longitude;
-            UserMarker.latitude  = crd.latitude;
-            UserMarker.longitude = crd.longitude;
-
-            finderMenu.hidden = true;
-            gMap.zoom         = 15;
-            gMap.fitToMarkers = true;
-            gMap.hidden       = false;
-            gMap.resize();
-
-            tabs.hidden = false;
-            tabs.notifyResize();
-            refreshButton.hidden = false;
-            spinner.active       = false;
-
-            var options = {
-                enableHighAccuracy: true,
-                maximumAge: 0
-            };
-
-            refreshButton.addEventListener('click', function () {
-                navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
-            });
-
-            tabs.addEventListener('iron-select', function () {
-                pages.selected = tabs.selected;
-            });
-        }
-    });
-
+        tabs.addEventListener('iron-select', function () {
+            pages.selected = tabs.selected;
+        });
+    }
+});
 </script>
 
 <paper-scroll-header-panel fixed="true">
     <div class="paper-header">
 
-            <paper-toolbar class="custom paper-header" justify="center">
-                <div class="title">Happly Hour</div>
-            </paper-toolbar>
+        <paper-toolbar class="custom paper-header" justify="center">
+            <div class="title">Happly Hour</div>
+        </paper-toolbar>
 
-            <paper-tabs selected="0" hidden="true" id="headerTabs">
-                <paper-tab>MAPS</paper-tab>
-                <paper-tab>CARDS</paper-tab>
-            </paper-tabs>
+        <paper-tabs selected="0" hidden="true" id="headerTabs">
+            <paper-tab>MAPS</paper-tab>
+            <paper-tab>CARDS</paper-tab>
+        </paper-tabs>
     </div>
-
 
     <div class="containerCustom">
 
@@ -244,74 +356,25 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 
                 <div class="flex-center-justified" id="finderMenu">
                     <paper-button id="barFinder" raised class="">Find bars around me</paper-button>
-                    <paper-spinner class="multi" ></paper-spinner>
+                    <paper-spinner class="multi"></paper-spinner>
                 </div>
 
-                <google-map latitude="37.779" longitude="-122.3892" zoom=""
+                <google-map latitude="37.779" longitude="-122.3892" zoom="15"
                             api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"
                             id="map" hidden="true">
                     <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
                         <p>Yeah... it's you.</p>
                     </google-map-marker>
-                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true" noink="false" focused="false"></paper-fab>
+                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true" noink="false"
+                               focused="false"></paper-fab>
                 </google-map>
 
                 <google-map-directions start-address="" end-address="" travel-mode="WALKING"
                                        api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
             </div>
 
-            <div>
-                <paper-card image="http://placehold.it/250x125/FFC107/000000" style="margin-bottom:12px;">
-                    <div class="card-content">
-                        <div class="cafe-header">Cafe Basilico
-                            <div class="cafe-location cafe-light">
-                                <iron-icon icon="communication:location-on"></iron-icon>
-                                <span>250ft</span>
-                            </div>
-                        </div>
-                        <div class="cafe-rating">
-                            <iron-icon class="star" icon="star"></iron-icon>
-                            <iron-icon class="star" icon="star"></iron-icon>
-                            <iron-icon class="star" icon="star"></iron-icon>
-                            <iron-icon class="star" icon="star"></iron-icon>
-                            <iron-icon class="star" icon="star"></iron-icon>
-                        </div>
-                        <p>$・Italian, Cafe</p>
-
-                        <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12
-                            indoor seats plus patio seating.</p>
-                    </div>
-                    <div class="card-actions">
-
-                        <paper-button class="cafe-reserve">View on map</paper-button>
-                    </div>
-                </paper-card>
-
-                <paper-card image="http://placehold.it/200x75/FFC107/000000" style="margin-bottom:12px;">
-                    <div class="card-content">
-                        <div class="cafe-header">Cafe Basilico
-                            <div class="cafe-location cafe-light">
-                                <iron-icon icon="communication:location-on"></iron-icon>
-                                <span>250ft</span>
-                            </div>
-                        </div>
-                        <div class="cafe-rating">
-                            <iron-icon class="star" icon="star"></iron-icon>
-                            <iron-icon class="star" icon="star"></iron-icon>
-                            <iron-icon class="star" icon="star"></iron-icon>
-                            <iron-icon class="star" icon="star"></iron-icon>
-                            <iron-icon class="star" icon="star"></iron-icon>
-                        </div>
-                        <p>$・Italian, Cafe</p>
-
-                        <p class="cafe-light">Small plates, salads &amp; sandwiches in an intimate setting with 12
-                            indoor seats plus patio seating.</p>
-                    </div>
-                    <div class="card-actions">
-
-                        <paper-button class="cafe-reserve">View on map</paper-button>
-                    </div>
-                </paper-card>
+            <div id="paperCard">
+                 
             </div>
         </iron-pages>
 
@@ -322,7 +385,15 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 </paper-scroll-header-panel>
 
 
-
+<iron-ajax
+        id="ajax-bars"
+        auto
+        url=""
+        params=""
+        handle-as="json"
+        on-response="handleResponse"
+        on-error="handleError"
+        debounce-duration="300"></iron-ajax>
 
 <!--Api key for android-->
 <!--<google-map disable-default-ui zoom="15" api-key="AIzaSyBu3FBIDdMOjJqRhZCvBQFPvGCiFL1qPzktype">-->
