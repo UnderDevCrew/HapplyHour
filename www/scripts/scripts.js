@@ -33,10 +33,10 @@ function createCards(response, parent, gMap, gDirection, tabs, crd)
         var divCardActions       = document.createElement('div');
         divCardActions.className = 'card-actions';
 
-        var ite = Math.round(placeInScope.note === null ? placeInScope.note = 0 : placeInScope.note);
-        var restIte = 5 - ite;
+        var barNote = Math.round(placeInScope.note === null ? placeInScope.note = 0 : placeInScope.note);
+        var restNote = 5 - barNote;
 
-        for (var i = 0; i < ite; i++) {
+        for (var i = 0; i < barNote; i++) {
 
             var paperIconButton       = document.createElement('paper-icon-button');
             paperIconButton.className = 'rate-icon yellowStar';
@@ -44,10 +44,10 @@ function createCards(response, parent, gMap, gDirection, tabs, crd)
             paperIconButton.setAttribute('icon', 'star');
             divCardActions.appendChild(paperIconButton);
         }
-        for (var i = 0; i < restIte; i++) {
+        for (var i = 0; i < restNote; i++) {
 
             var paperIconButton       = document.createElement('paper-icon-button');
-            paperIconButton.className = 'rate-icon greyStars';
+            paperIconButton.className = 'rate-icon';
 
             paperIconButton.setAttribute('icon', 'star');
             divCardActions.appendChild(paperIconButton);
