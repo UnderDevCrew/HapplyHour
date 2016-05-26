@@ -151,14 +151,6 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             --iron-icon-stroke-color: var(--paper-grey-600);
         }
 
-        .yellowStars {
-            --iron-icon-fill-color: yellow;
-        }
-
-        .greyStars {
-            --iron-icon-fill-color: white;
-        }
-
     </style>
 
 </head>
@@ -206,6 +198,7 @@ document.addEventListener('WebComponentsReady', function () {
         var gDirection    = document.querySelector('google-map-directions');
 
         ajaxElement.url     = "http://api.happlyhour.io/bars";
+
         ajaxElement.params  = {"latitude": crd.latitude, "longitude": crd.longitude};
         ajaxElement.verbose = true;
 
@@ -243,7 +236,14 @@ document.addEventListener('WebComponentsReady', function () {
         tabs.addEventListener('iron-select', function () {
             pages.selected = tabs.selected;
         });
+
+        tabs.addEventListener('iron-select', function () {
+            for (var j = 0;j < document.getElementsByClassName('yellowStar').length; j++){
+                document.getElementsByClassName('yellowStar')[j].firstChild.style.fill = '#F4EC7D';
+            }
+        });
     }
+
 });
 </script>
 
