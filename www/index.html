@@ -164,6 +164,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 document.addEventListener('WebComponentsReady', function () {
 
     var button = document.getElementById('barFinder');
+    button.style.left = '35%';
+    button.style.bottom = '40%';
+    button.style.height = '120px';
+    button.style.width = '120px';
     button.firstChild.style.height = '50px';
     button.firstChild.style.width = '50px';
 
@@ -269,7 +273,7 @@ document.addEventListener('WebComponentsReady', function () {
             <div class="containerCustom">
 
                 <div class="flex-center-justified" id="finderMenu">
-                    <paper-fab id="barFinder" style="left:35%;bottom:40%;height:120px;width:120px;" src="/android/www/img/beer.png"></paper-fab>
+                    <paper-fab id="barFinder" src="/android/www/img/beer.png"></paper-fab>
                     <paper-spinner class="multi"></paper-spinner>
                 </div>
 
