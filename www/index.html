@@ -73,6 +73,10 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
             margin: 0;
         }
 
+        #barFinder {
+            @apply(--layout-center-justified);
+        }
+
         paper-scroll-header-panel {
             height: 100%;
         }
@@ -164,6 +168,14 @@ subject to an additional IP rights grant found at http://polymer.github.io/PATEN
 document.addEventListener('WebComponentsReady', function () {
 
     var button = document.getElementById('barFinder');
+    button.style.left = '50%';
+    button.style.top = '50%';
+    button.style.bottom = '40%';
+    button.style.height = '120px';
+    button.style.width = '120px';
+    button.style.transform = 'translate(-50%,-50%)';
+    button.firstChild.style.height = '50px';
+    button.firstChild.style.width = '50px';
 
     button.addEventListener('click', function () {
         var spinner    = document.querySelector('paper-spinner');
@@ -267,7 +279,7 @@ document.addEventListener('WebComponentsReady', function () {
             <div class="containerCustom">
 
                 <div class="flex-center-justified" id="finderMenu">
-                    <paper-button id="barFinder" raised class="">Find bars around me</paper-button>
+                    <paper-fab id="barFinder" src="/android/www/img/beer.png"></paper-fab>
                     <paper-spinner class="multi"></paper-spinner>
                 </div>
 
