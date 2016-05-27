@@ -96,3 +96,71 @@ function createCards(response, parent, gMap, gDirection, tabs, crd)
     }
 
 }
+
+function geolocationError(error)
+{
+    console.warn('ERROR(' + error.code + '): ' + error.message);
+
+    var toast = document.getElementById('gelocationError');
+    toast.open();
+}
+
+function geolocationSuccess(position)
+{
+    var spinner       = document.querySelector('paper-spinner');
+    var gMap          = document.querySelector('google-map');
+    var crd           = position.coords;
+    var refreshButton = document.getElementById('refreshButton');
+    var UserMarker    = document.getElementById('user_marker');
+    var pages         = document.querySelector('iron-pages');
+    var tabs          = document.getElementById('headerTabs');
+    var finderMenu    = document.getElementById('finderMenu');
+    var ajaxElement   = document.getElementById('ajax-bars');
+    var gDirection    = document.querySelector('google-map-directions');
+
+    ajaxElement.url     = "http://api.happlyhour.io/bars";
+
+    ajaxElement.params  = {"latitude": crd.latitude, "longitude": crd.longitude};
+    ajaxElement.verbose = true;
+
+    ajaxElement.addEventListener('response', function (request) {
+
+        var aReponseApi = request.detail.response;
+        var hostElement = document.getElementById('paperCard');
+        createCards(aReponseApi, hostElement, gMap, gDirection, tabs, crd);
+
+    });
+
+    UserMarker.latitude  = crd.latitude;
+    UserMarker.longitude = crd.longitude;
+
+    finderMenu.hidden = true;
+    gMap.zoom         = 15;
+    gMap.fitToMarkers = true;
+    gMap.hidden       = false;
+    gMap.resize();
+
+    tabs.hidden = false;
+    tabs.notifyResize();
+    refreshButton.hidden = false;
+    spinner.active       = false;
+
+    var options = {
+        enableHighAccuracy: true,
+        maximumAge: 0
+    };
+
+    refreshButton.addEventListener('click', function () {
+        navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
+    });
+
+    tabs.addEventListener('iron-select', function () {
+        pages.selected = tabs.selected;
+    });
+
+    tabs.addEventListener('iron-select', function () {
+        for (var j = 0;j < document.getElementsByClassName('yellowStar').length; j++){
+            document.getElementsByClassName('yellowStar')[j].firstChild.style.fill = '#F4EC7D';
+        }
+    });
+}
