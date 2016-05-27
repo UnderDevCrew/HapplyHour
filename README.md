@@ -19,6 +19,12 @@ First, make sure Phonegap CLI tools are installed on your machine. If not just e
 npm install -g phonegap
 ```
 
+Install this plugin to enable geolocation:
+
+```sh
+phonegap plugin add cordova-plugin-geolocation
+```
+
 Install the Crosswalk WebView (makes Polymer faster to render) :
 
 ```sh
