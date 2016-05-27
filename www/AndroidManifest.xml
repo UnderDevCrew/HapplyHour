@@ -16,26 +16,36 @@
 -->
 
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
-          package="com.example.android.basiccontactables"
+          package="com.underdevcrew.happlyhour"
           android:versionCode="1"
           android:versionName="1.0" >
 
-    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
 
     <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
     <permission android:name="android"></permission>
 
+    <permission android:name="android.permission.INTERNET" />
+    <permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
     <application
             android:allowBackup="true"
-            android:icon="@drawable/ic_launcher"
+            android:icon="@mipmap/ic_launcher"
             android:label="@string/HapplyHour"
             android:theme="@style/Theme.Sample" >
         <activity
                 android:name="com.example.android.basiccontactables.MainActivity"
                 android:label="@string/HapplyHour"
-                android:launchMode="singleTop">
+                android:launchMode="singleTop"
+                android:permission="android.permission.INTERNET"
+                android:permission="android.permission.ACCESS_COARSE_LOCATION"
+                android:permission="android.permission.ACCESS_FINE_LOCATION"
+                android:permission="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS">
             <meta-data
                     android:name="android.app.searchable"
                     android:resource="@xml/searchable" />
