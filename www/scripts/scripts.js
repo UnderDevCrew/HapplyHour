@@ -63,7 +63,6 @@ function createCards(response, parent, gMap, gDirection, tabs, crd)
 
             var end_lat     = this.dataset.lat;
             var end_long    = this.dataset.long;
-            //var start       = crd.latitude + ',' + crd.longitude;
             var start       = crd.latitude + ',' + crd.longitude;
             var end         = end_lat + ',' + end_long;
             gDirection.map  = gMap.map;
