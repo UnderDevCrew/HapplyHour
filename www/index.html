@@ -218,6 +218,8 @@ document.addEventListener('WebComponentsReady', function () {
 
             var aReponseApi = request.detail.response;
             var hostElement = document.getElementById('paperCard');
+
+            hostElement.innerHTML = '';
             createCards(aReponseApi, hostElement, gMap, gDirection, tabs, crd);
 
         });
