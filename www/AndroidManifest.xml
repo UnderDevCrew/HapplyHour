@@ -1,0 +1,61 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!--
+ Copyright 2013 The Android Open Source Project
+
+ Licensed under the Apache License, Version 2.0 (the "License");
+ you may not use this file except in compliance with the License.
+ You may obtain a copy of the License at
+
+     http://www.apache.org/licenses/LICENSE-2.0
+
+ Unless required by applicable law or agreed to in writing, software
+ distributed under the License is distributed on an "AS IS" BASIS,
+ WITHOUT WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied.
+ See the License for the specific language governing permissions and
+ limitations under the License.
+-->
+
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+          package="com.underdevcrew.happlyhour"
+          android:versionCode="1"
+          android:versionName="1.0" >
+
+
+    <!-- Min/target SDK versions (<uses-sdk>) managed by build.gradle -->
+    <permission android:name="android"></permission>
+
+    <permission android:name="android.permission.INTERNET" />
+    <permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS" />
+
+    <application
+            android:allowBackup="true"
+            android:icon="@mipmap/ic_launcher"
+            android:label="@string/HapplyHour"
+            android:theme="@style/Theme.Sample" >
+        <activity
+                android:name="com.example.android.basiccontactables.MainActivity"
+                android:label="@string/HapplyHour"
+                android:launchMode="singleTop"
+                android:permission="android.permission.INTERNET"
+                android:permission="android.permission.ACCESS_COARSE_LOCATION"
+                android:permission="android.permission.ACCESS_FINE_LOCATION"
+                android:permission="android.permission.ACCESS_LOCATION_EXTRA_COMMANDS">
+            <meta-data
+                    android:name="android.app.searchable"
+                    android:resource="@xml/searchable" />
+            <intent-filter>
+                <action android:name="android.intent.action.SEARCH" />
+            </intent-filter>
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+    </application>
+</manifest>

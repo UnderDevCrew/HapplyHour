@@ -1,46 +1,260 @@
-<!DOCTYPE html>
+<!doctype html>
 <!--
-    Copyright (c) 2012-2014 Adobe Systems Incorporated. All rights reserved.
-
-    Licensed to the Apache Software Foundation (ASF) under one
-    or more contributor license agreements.  See the NOTICE file
-    distributed with this work for additional information
-    regarding copyright ownership.  The ASF licenses this file
-    to you under the Apache License, Version 2.0 (the
-    "License"); you may not use this file except in compliance
-    with the License.  You may obtain a copy of the License at
-
-    http://www.apache.org/licenses/LICENSE-2.0
-
-    Unless required by applicable law or agreed to in writing,
-    software distributed under the License is distributed on an
-    "AS IS" BASIS, WITHOUT WARRANTIES OR CONDITIONS OF ANY
-     KIND, either express or implied.  See the License for the
-    specific language governing permissions and limitations
-    under the License.
+@license
+Copyright (c) 2015 The Polymer Project Authors. All rights reserved.
+This code may only be used under the BSD style license found at http://polymer.github.io/LICENSE.txt
+The complete set of authors may be found at http://polymer.github.io/AUTHORS.txt
+The complete set of contributors may be found at http://polymer.github.io/CONTRIBUTORS.txt
+Code distributed by Google as part of the polymer project is also
+subject to an additional IP rights grant found at http://polymer.github.io/PATENTS.txt
 -->
-<html>
-    <head>
-        <meta charset="utf-8" />
-        <meta name="format-detection" content="telephone=no" />
-        <meta name="msapplication-tap-highlight" content="no" />
-        <!-- WARNING: for iOS 7, remove the width=device-width and height=device-height attributes. See https://issues.apache.org/jira/browse/CB-4323 -->
-        <meta name="viewport" content="user-scalable=no, initial-scale=1, maximum-scale=1, minimum-scale=1, width=device-width, height=device-height, target-densitydpi=device-dpi" />
-        <link rel="stylesheet" type="text/css" href="css/index.css" />
-        <title>Hello World</title>
-    </head>
-    <body>
-        <div class="app">
-            <h1>PhoneGap</h1>
-            <div id="deviceready" class="blink">
-                <p class="event listening">Connecting to Device</p>
-                <p class="event received">Device is Ready</p>
+
+<html lang="en">
+
+<head>
+
+    <!-- build:js bower_components/webcomponentsjs/webcomponents-lite.min.js -->
+    <script src="bower_components/webcomponentsjs/webcomponents-lite.js"></script>
+    <!-- endbuild -->
+
+    <meta charset="utf-8">
+    <meta name="description" content="">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="generator" content="Happly Hour">
+    <title>Happly Hour</title>
+
+    <!-- Place favicon.ico in the `app/` directory -->
+    <link rel="icon" type="image/png" href="favicon.ico"/>
+    <!-- Chrome for Android theme color -->
+    <meta name="theme-color" content="#2E3AA1">
+
+    <!-- Web Application Manifest -->
+    <link rel="manifest" href="manifest.json">
+
+    <!-- Tile color for Win8 -->
+    <meta name="msapplication-TileColor" content="#3372DF">
+
+    <!-- Add to homescreen for Chrome on Android -->
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="PSK">
+    <!--<link rel="icon" sizes="192x192" href="images/touch/chrome-touch-icon-192x192.png">-->
+
+    <!-- Add to homescreen for Safari on iOS -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="Polymer Starter Kit">
+    <!--<link rel="apple-touch-icon" href="images/touch/apple-touch-icon.png">-->
+
+    <!-- Tile icon for Win8 (144x144) -->
+    <meta name="msapplication-TileImage" content="images/touch/ms-touch-icon-144x144-precomposed.png">
+
+    <!-- build:css styles/main.css -->
+    <link rel="stylesheet" href="styles/main.css">
+    <!-- endbuild-->
+
+
+    <!--<script src="../platforms/browser/www/cordova.js"></script>-->
+
+    <!-- Because this project uses vulcanize this should be your only html import
+         in this file. All other imports should go in elements.html -->
+    <link rel="import" href="elements/elements.html">
+
+    <!-- For shared styles, shared-styles.html import in elements.html -->
+    <style is="custom-style" include="shared-styles"></style>
+
+    <!-- Custom style -->
+    <style is="custom-style" include="shared-styles"></style>
+
+    <style is="custom-style">
+
+
+        html, body {
+            height: 100%;
+            margin: 0;
+        }
+
+        #barFinder {
+            @apply(--layout-center-justified);
+        }
+
+        paper-scroll-header-panel {
+            height: 100%;
+        }
+
+        paper-toolbar.custom {
+            --paper-toolbar-background: var(--paper-green-700);
+            --paper-toolbar-title: {
+                font-weight: bold;
+            };
+        }
+
+        paper-spinner.multi {
+            display: block;
+        }
+
+        paper-fab {
+            --paper-fab-background: var(--paper-green-700);
+            --paper-fab-keyboard-focus-background: var(--paper-green-800);
+            z-index: 1000;
+            position: absolute;
+            bottom: 5%;
+            left: 2%;
+        }
+
+        .containerCustom {
+            @apply(--layout-flex);
+            @apply(--layout-vertical);
+            width: 100%;
+            height: 100%;
+        }
+
+        paper-tabs {
+
+            --paper-tabs-selection-bar-color: var(--paper-green-700);
+            --paper-tabs-selection-bar: {
+                height: 4px;
+            }
+        }
+
+        .flex-center-justified {
+            @apply(--layout-horizontal);
+            @apply(--layout-center-justified);
+            @apply(--layout-vertical-center);
+        }
+
+        .cafe-reserve {
+            color: var(--paper-green-800);
+        }
+
+        paper-card.rate {
+            @apply(--layout-horizontal);
+        }
+
+        .rate-image {
+            width: 100px;
+            height: auto;
+            background-size: cover;
+        }
+
+        .rate-content {
+            @apply(--layout-flex);
+            float: left;
+        }
+
+        .rate-header {
+            @apply(--paper-font-headline);
+        }
+
+        .rate-name {
+            color: var(--paper-grey-600);
+            margin: 10px 0;
+        }
+
+        paper-icon-button.rate-icon {
+            --iron-icon-fill-color: white;
+            --iron-icon-stroke-color: var(--paper-grey-600);
+        }
+
+    </style>
+
+</head>
+
+<body unresolved>
+
+<script src="scripts/app.js"></script>
+<script src="scripts/scripts.js"></script>
+<script type="text/javascript" charset="utf-8">
+
+document.addEventListener('WebComponentsReady', function () {
+
+    var button = document.getElementById('barFinder');
+    button.style.left = '50%';
+    button.style.top = '50%';
+    button.style.bottom = '40%';
+    button.style.height = '120px';
+    button.style.width = '120px';
+    button.style.transform = 'translate(-50%,-50%)';
+    button.firstChild.style.height = '50px';
+    button.firstChild.style.width = '50px';
+
+    button.addEventListener('click', function () {
+        var spinner    = document.querySelector('paper-spinner');
+        spinner.active = true;
+
+        var options = {
+            enableHighAccuracy: true,
+            maximumAge: 0
+        };
+
+        navigator.geolocation.getCurrentPosition(geolocationSuccess, geolocationError, options);
+    });
+});
+</script>
+
+<paper-scroll-header-panel fixed="true">
+    <div class="paper-header">
+
+        <paper-toolbar class="custom paper-header" justify="center">
+            <paper-icon-button src="img/logo.png"></paper-icon-button>
+            <div class="title">Happly Hour</div>
+        </paper-toolbar>
+
+        <paper-tabs selected="0" hidden="true" id="headerTabs">
+            <paper-tab>MAPS</paper-tab>
+            <paper-tab>CARDS</paper-tab>
+        </paper-tabs>
+    </div>
+
+    <div class="containerCustom">
+
+        <iron-pages selected="0" class="containerCustom">
+
+            <div class="containerCustom">
+
+                <div class="flex-center-justified" id="finderMenu">
+                    <paper-fab id="barFinder" src="img/beer.png"></paper-fab>
+                    <paper-spinner class="multi"></paper-spinner>
+                </div>
+
+                <google-map latitude="37.779" longitude="-122.3892" zoom="15"
+                            api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"
+                            id="map" hidden="true">
+                    <google-map-marker id="user_marker" latitude="" longitude="" draggable="false" title="user marker">
+                        <p>Yeah... it's you.</p>
+                    </google-map-marker>
+                    <paper-fab id="refreshButton" icon="refresh" title="refreshButton" hidden="true" noink="false"
+                               focused="false"></paper-fab>
+                </google-map>
+
+                <google-map-directions start-address="" end-address="" travel-mode="WALKING"
+                                       api-key="AIzaSyAMK9GqpUJOOGk6O2mjxKKQ7TTlfIJx_yQ"></google-map-directions>
             </div>
-        </div>
-        <script type="text/javascript" src="cordova.js"></script>
-        <script type="text/javascript" src="js/index.js"></script>
-        <script type="text/javascript">
-            app.initialize();
-        </script>
-    </body>
+
+            <div id="paperCard">
+ 
+            </div>
+        </iron-pages>
+
+
+        <paper-toast id="geolocationError" duration="5000"
+                     text="something went wrong with your geolocation, please try to activate it or authorize the app and retry :)"></paper-toast>
+    </div>
+</paper-scroll-header-panel>
+
+
+<iron-ajax
+        id="ajax-bars"
+        auto
+        url=""
+        params=""
+        handle-as="json"
+        on-response="handleResponse"
+        on-error="handleError"
+        debounce-duration="300"></iron-ajax>
+
+<!--Api key for android-->
+<!--<google-map disable-default-ui zoom="15" api-key="AIzaSyBu3FBIDdMOjJqRhZCvBQFPvGCiFL1qPzktype">-->
+
+</body>
+
 </html>
