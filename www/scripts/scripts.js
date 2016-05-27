@@ -3,6 +3,7 @@
  */
 function createCards(response, parent, gMap, gDirection, tabs, crd)
 {
+  parent.innerHTML = '';
     for (var place in response.places) {
 
         tabs.notifyResize();
